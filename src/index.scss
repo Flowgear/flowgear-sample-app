@@ -1,0 +1,59 @@
+@import "flowgear-webapp/dist/css/app.css";
+
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    padding-top: 0px;
+    font-size: 14px;
+}
+
+.command-container,
+.navbar {
+    position: relative !important;
+}
+
+.refresh-button:focus {
+  border-color: #009688 !important;
+}
+
+.app-contentarea {
+    margin-top: 30px;
+    padding: 0 30px;
+}
+
+table {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+[data-theme="dark-theme-ci"] table {
+    border-color: #3f4947 !important;
+}
+
+table th,
+table td {
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    white-space: nowrap;
+    padding: 8px;
+}
+
+[data-theme="dark-theme-ci"] table th,
+[data-theme="dark-theme-ci"] table td {
+    border-color: #3f4947 !important;
+}
+
+table td.text-align-left,
+table th.text-align-left {
+    text-align: left;
+}
+
+table td.text-align-right,
+table th.text-align-right {
+    text-align: right;
+}
