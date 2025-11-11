@@ -1,5 +1,4 @@
 import { useState } from "react";
-import SampleTable from "./sampleTable";
 
 function App() {
   const [refreshData, setRefreshData] = useState(false);
@@ -20,8 +19,8 @@ function App() {
       </nav>
 
       <div className="app-contentarea">
-        <SampleTable refresh={refreshData} />
-      </div>
+        {"Hello world!"}
+      </div> 
     </>
   );
 }

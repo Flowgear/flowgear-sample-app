@@ -1,3 +1,13 @@
+# Debugging
+
+To use the app, it must be embedded into the Flowgear Console. Assuming the app runs at
+https://localhost:3000, use the following URL template:
+
+https://app.flowgear.net/#{t-tenantkey}/sites/{sitekey}/apps/debug/?debugUrl=https%3A%2F%2Flocalhost%3A3000%2F
+
+Replace {tenantkey} and {sitekey} with the appopriate values for your tenant and site.
+
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
