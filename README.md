@@ -1,12 +1,28 @@
-# Debugging
+# Flowgear Debugging
 
-To use the app, it must be embedded into the Flowgear Console. Assuming the app runs at
-https://localhost:3000, use the following URL template:
+This app only works when it is embedded inside the Flowgear Console. The dev server now launches the correct console URL automatically, but it needs a few local-only settings first.
 
-https://app.flowgear.net/#{t-tenantkey}/sites/{sitekey}/apps/debug/?debugUrl=https%3A%2F%2Flocalhost%3A3000%2F
+## One-time setup
 
-Replace {tenantkey} and {sitekey} with the appopriate values for your tenant and site.
+In `.env.local`, set values for `FG_TENANT` and `FG_SITE`
 
+If either `FG_TENANT` or `FG_SITE` is missing, `npm run dev` (and any other Vite command) will fail early with an explanatory error so you know to populate `.env.local`.
+
+## Running locally
+
+```bash
+npm install
+npm run dev
+```
+
+When the dev server starts, it opens the Flowgear Console automatically using the following pattern:
+
+```
+https://app.flowgear.net/#t-{tenant}/sites/{site}/apps/debug/?debugUrl={encoded-local-url}
+```
+
+Where `{tenant}` and `{site}` come from `.env.local`, and `{encoded-local-url}` is the URL for the
+local dev server with the characters escaped for a query string.
 
 # React + TypeScript + Vite
 
