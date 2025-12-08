@@ -4,9 +4,9 @@ This app only works when it is embedded inside the Flowgear Console. The dev ser
 
 ## One-time setup
 
-In `.env.local`, set values for `FG_TENANT` and `FG_SITE`
+In `.env.local`, set values for `FG_DEV_TENANT` and `FG_DEV_SITE`
 
-If either `FG_TENANT` or `FG_SITE` is missing, `npm run dev` (and any other Vite command) will fail early with an explanatory error so you know to populate `.env.local`.
+If either `FG_DEV_TENANT` or `FG_DEV_SITE` is missing, `npm run dev` (and any other Vite command) will fail early with an explanatory error so you know to populate `.env.local`.
 
 ## Running locally
 

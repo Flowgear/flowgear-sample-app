@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, process.cwd(), "");
     const isDev = mode === "development";
 
-    const tenant = env.FG_TENANT ?? process.env.FG_TENANT ?? "";
-    const site = env.FG_SITE ?? process.env.FG_SITE ?? "";
+    const tenant = env.FG_DEV_TENANT ?? "";
+    const site = env.FG_DEV_SITE ?? "";
 
     const devProtocol = env.FG_DEV_PROTOCOL ?? "https";
     const devHost = env.FG_DEV_HOST ?? "localhost";
@@ -31,16 +31,31 @@ export default defineConfig(({ mode }) => {
         devPort ? `:${devPort}` : ""
     }`;
 
-    if (isDev && tenant && site) {
-        const flowgearUrl = `${FLOWGEAR_CONSOLE_BASE}/#t-${tenant}/sites/${site}/apps/debug/?debugUrl=${encodeURIComponent(
-            localAppUrl
-        )}`;
+    const flowgearUrl =
+        isDev && tenant && site
+            ? `${FLOWGEAR_CONSOLE_BASE}/#t-${tenant}/sites/${site}/apps/debug/?debugUrl=${encodeURIComponent(
+                  localAppUrl
+              )}`
+            : null;
 
-        // Open local URL first for cert acceptance, then Flowgear URL
-        setTimeout(() => openBrowser(localAppUrl), 500);
-        setTimeout(() => openBrowser(flowgearUrl), 1500);
+    return {
+        base: "./",
+        plugins: [
+            react(),
+            basicSsl(),
+            {
+                name: "flowgear-dev-open",
+                configureServer(server) {
+                    let opened = false;
+                    server.httpServer?.once("listening", () => {
+                        if (opened || !isDev) return;
+                        opened = true;
 
-        console.log(`
+                        if (flowgearUrl) {
+                            setTimeout(() => openBrowser(localAppUrl), 500);
+                            setTimeout(() => openBrowser(flowgearUrl), 1500);
+
+                            console.log(`
 [Flowgear App] Two browser tabs are opening:
 
   1. ${localAppUrl}
@@ -51,16 +66,16 @@ export default defineConfig(({ mode }) => {
 
 If the app doesn't load in Flowgear, refresh after accepting the certificate.
 `);
-    } else if (isDev) {
-        console.warn(
-            "[flowgear-sample-app] FG_TENANT and/or FG_SITE not set in .env.local. " +
-                "Auto-open to Flowgear debug URL is disabled."
-        );
-    }
-
-    return {
-        base: "./",
-        plugins: [react(), basicSsl()],
+                        } else {
+                            console.warn(
+                                "[flowgear-sample-app] FG_DEV_TENANT and/or FG_DEV_SITE not set in .env.local. " +
+                                    "Auto-open to Flowgear debug URL is disabled."
+                            );
+                        }
+                    });
+                },
+            },
+        ],
         server: {
             allowedHosts: true,
             host: devHost,
@@ -69,7 +84,6 @@ If the app doesn't load in Flowgear, refresh after accepting the certificate.
             headers: {
                 "Access-Control-Allow-Origin": "*",
             },
-            open: false, // We handle opening manually
         },
     };
 });
