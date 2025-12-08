@@ -1,101 +1,37 @@
-# Flowgear Debugging
+# Flowgear Sample App
 
-This app only works when it is embedded inside the Flowgear Console. The dev server now launches the correct console URL automatically, but it needs a few local-only settings first.
+React + TypeScript app that is always embedded inside the Flowgear Console. All data access goes through the Flowgear SDK, and the dev server is wired to open the console in debug mode automatically.
 
-## One-time setup
+## Tech stack (current)
+- React 19.1 + React DOM 19.1 with the React Compiler enabled
+- Vite 7.1 (TypeScript 5.9) with `@vitejs/plugin-react` and `@vitejs/plugin-basic-ssl`
+- Flowgear SDK: `flowgear-webapp@1.4.3` (`Flowgear.Sdk.invoke`, `init`, `setAlert`, etc.)
+- UI: Bootstrap 5.3.8 and Sass
+- Linting: ESLint 9.x (see `eslint.config.js`)
 
-In `.env.local`, set values for `FG_TENANT` and `FG_SITE`
+## API usage
+- Call workflows via `Flowgear.Sdk.invoke(method, relativePath, payload?, headers?, tenant?)`.
+- Discover available endpoints in `openapi.yml`, but ignore `servers`, `components`, and `security`; only the method and relative URL are passed to `invoke`.
+- Do not call APIs directly with `fetch`/`axios` because the console provides the auth cookie on your behalf.
 
-If either `FG_TENANT` or `FG_SITE` is missing, `npm run dev` (and any other Vite command) will fail early with an explanatory error so you know to populate `.env.local`.
+## Local development
+1. Set `.env.local` values:
+   - `FG_DEV_TENANT` and `FG_DEV_SITE` (required)
+   - Optional: `FG_DEV_PROTOCOL` (`https` default), `FG_DEV_HOST` (`localhost`), `FG_DEV_PORT` (`3000`)
+2. Install and run:
+   ```bash
+   npm install
+   npm run dev
+   ```
+3. The dev server starts on a self-signed HTTPS host and opens two tabs:
+   - Local app URL (accept the certificate)
+   - Flowgear Console debug URL: `https://app.flowgear.net/#t-{tenant}/sites/{site}/apps/debug/?debugUrl={encoded-local-url}`
 
-## Running locally
+## Publishing checklist
+- Update `public/app.json` (manifest, embed mode, menu placement) and bump `Version`.
+- Provide the icon at `public/icon.svg`.
+- Build and package: `npm run build`, then zip the `build` directory contents for upload.
 
-```bash
-npm install
-npm run dev
-```
-
-When the dev server starts, it opens the Flowgear Console automatically using the following pattern:
-
-```
-https://app.flowgear.net/#t-{tenant}/sites/{site}/apps/debug/?debugUrl={encoded-local-url}
-```
-
-Where `{tenant}` and `{site}` come from `.env.local`, and `{encoded-local-url}` is the URL for the
-local dev server with the characters escaped for a query string.
-
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Recommended extensions & tooling
+- ESLint (VS Code extension) to surface lint feedback from the existing config.
+- Codex (CLI or VS Code extension) to develop with the guidance in `AGENTS.md` and keep API calls routed through `Flowgear.Sdk.invoke`.
