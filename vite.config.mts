@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
 If the app doesn't load in Flowgear, refresh after accepting the certificate.
 `);
                         } else {
+                           setTimeout(() => openBrowser(localAppUrl), 500);
                             console.warn(
                                 "[flowgear-sample-app] FG_DEV_TENANT and/or FG_DEV_SITE not set in .env.local. " +
                                     "Auto-open to Flowgear debug URL is disabled."
