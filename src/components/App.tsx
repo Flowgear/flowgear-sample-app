@@ -1,8 +1,7 @@
 import { useState } from "react";
-import ContactsTable from "./ContactsTable";
 
 function App() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshData, setRefreshData] = useState(false);
 
   return (
     <>
@@ -10,7 +9,9 @@ function App() {
         <div className="command-container-center-controls">
           <button
             className="btn btn-command btn-command-text btn-command-emphasis refresh-button"
-            onClick={() => setRefreshKey((key) => key + 1)}
+            onClick={() => {
+              setRefreshData(!refreshData);
+            }}
           >
             Refresh
           </button>
@@ -18,10 +19,8 @@ function App() {
       </nav>
 
       <div className="app-contentarea">
-        <h2>Contacts</h2>
-        <p>Populated via the SQL Get Contacts workflow.</p>
-        <ContactsTable refreshKey={refreshKey} />
-      </div>
+        {"Hello world!"}
+      </div> 
     </>
   );
 }
