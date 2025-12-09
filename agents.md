@@ -4,7 +4,7 @@ This repository hosts a React app that is always embedded in an iframe inside th
 
 ## Core rules
 - All data access must go through `Flowgear.Sdk.invoke` from the `flowgear-webapp` package. The Console holds the auth cookie and performs the HTTP call on behalf of the iframe. Never call APIs directly with `fetch`/`axios`.
-- Use the API descriptors in the root `openapi.yml` to discover available endpoints, but pass only the HTTP method and relative path to `Flowgear.Sdk.invoke(...)`. Ignore the `servers`, `components`, and `security` sections in that file.
+- Use the API descriptors in the root `openapi.yml` to discover available endpoints, but pass only the HTTP method and relative path to `Flowgear.Sdk.invoke(...)`. Always send HTTP methods in uppercase (e.g., `GET`, `POST`, `PUT`, `PATCH`) even if `openapi.yml` lists them in lowercase. Ignore the `servers`, `components`, and `security` sections in that file.
 - Place feature-specific work under `components`, `models`, `services`, and `utils`, splitting by functional area.
 
 ## Flowgear SDK helpers
