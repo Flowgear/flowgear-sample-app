@@ -30,12 +30,13 @@ export default defineConfig(({ mode }) => {
     const localAppUrl = `${devProtocol}://${devHost}${
         devPort ? `:${devPort}` : ""
     }`;
+    const environmentKey = env.FG_DEV_ENVIRONMENT ?? "";
 
     const flowgearUrl =
         isDev && tenant && site
             ? `${FLOWGEAR_CONSOLE_BASE}/#t-${tenant}/sites/${site}/apps/debug/?debugUrl=${encodeURIComponent(
                   localAppUrl
-              )}`
+              )}${environmentKey ? `&environmentKey=${environmentKey}` : ''}`
             : null;
 
     return {
