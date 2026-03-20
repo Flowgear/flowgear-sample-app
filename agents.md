@@ -6,6 +6,15 @@ This repository hosts a React app that is always embedded in an iframe inside th
 - All data access must go through `Flowgear.Sdk.invoke` from the `flowgear-webapp` package. The Console holds the auth cookie and performs the HTTP call on behalf of the iframe. Never call APIs directly with `fetch`/`axios`.
 - Use the API descriptors in the root `openapi.yml` to discover available endpoints, but pass only the HTTP method and relative path to `Flowgear.Sdk.invoke(...)`. Always send HTTP methods in uppercase (e.g., `GET`, `POST`, `PUT`, `PATCH`) even if `openapi.yml` lists them in lowercase. Ignore the `servers`, `components`, and `security` sections in that file.
 - Place feature-specific work under `components`, `models`, `services`, and `utils`, splitting by functional area.
+- This repo should only ever contain client side code. Whenever there's a need to connect to a data source, this should be done via a Flowgear workflow invoke, see below
+
+# Flowgear workflows
+
+- Workflows describe steps to acquire, push or otherwise integrate between data sources
+- There should be a registered MCP server called 'flowgear'.
+- Read its resources to access prompt information that explains how to use the available tools to 
+  build a Flowgear workflow for a specific objective.
+
 
 ## Flowgear SDK helpers
 - `init()` is called in `src/index.tsx` to register the app with the host console before rendering.
