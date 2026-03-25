@@ -13,8 +13,8 @@ This repository hosts a React app that is always embedded in an iframe inside th
 - Workflows describe steps to acquire, push or otherwise integrate between data sources
 - There should be a registered MCP server called `flowgear` which contains all the tools you need to find, design and save workflows. Ask the user which server to use if there isn't one called `flowgear`.
 - There is an MCP resource that explains how to use the tools. Read that before doing anything else.
-- For a workflow to be invoked via this app, it must be HTTP-triggered. First step in the Workflow should be v2.Http Node, HttpReceive method (where method and uri binding are declared as parameers), last step should be v2.Http Node, HttpRespond method
-- After creating or editing a workflow, download a fresh openapi.yml definition so that you can see verify the service definitions in order to bind front-end.
+- For a workflow to be invoked via this app, it must be HTTP-triggered. First step in the Workflow should be v2.Http Node, HttpReceiveJsonObject or HttpReceiveJsonArray method (where method and uri binding are declared as parameters), last step should be v2.Http Node, HttpRespondJsonObject or HttpRespondJsonArray method
+- After creating or editing a workflow, download a fresh openapi.yml definition so that you can see the service definitions in order to bind front-end.
 
 
 ## Flowgear SDK helpers
