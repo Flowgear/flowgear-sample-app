@@ -8,7 +8,7 @@ This repository hosts a React app that is always embedded in an iframe inside th
 - Place feature-specific work under `components`, `models`, `services`, and `utils`, splitting by functional area.
 - This repo should only ever contain client side code. When a required API is not available, you should build or edit a Flowgear workflow - see below.
 
-# Flowgear workflows
+## Flowgear workflows
 
 - Workflows describe steps to acquire, push or otherwise integrate between data sources
 - There should be a registered MCP server called `flowgear` which contains all the tools you need to find, design and save workflows. Ask the user which server to use if there isn't one called `flowgear`.
@@ -16,6 +16,8 @@ This repository hosts a React app that is always embedded in an iframe inside th
 - For a workflow to be invoked via this app, it must be HTTP-triggered. First step in the Workflow should be v2.Http Node, HttpReceiveJsonObject or HttpReceiveJsonArray method (where method and uri binding are declared as parameters), last step should be v2.Http Node, HttpRespondJsonObject or HttpRespondJsonArray method
 - After creating or editing a workflow, download a fresh openapi.yml definition so that you can see the service definitions in order to bind front-end.
 
+## General
+- Don't use forms, the web app runs in a sandbox and form submissions are not allowed.
 
 ## Flowgear SDK helpers
 - `init()` is called in `src/index.tsx` to register the app with the host console before rendering.
