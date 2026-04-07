@@ -24,6 +24,21 @@ body {
     padding: 0 30px;
 }
 
+.endpoint-response {
+    margin-top: 20px;
+    padding: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+[data-theme="dark-theme-ci"] .endpoint-response {
+    border-color: #3f4947 !important;
+    background-color: #252f2d;
+}
+
 table {
     width: 100%;
     border: 1px solid #ddd;

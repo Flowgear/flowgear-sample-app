@@ -1,1 +1,58 @@
-# Place the OpenAPI definitions from your Flowgear site here
+openapi: 3.0.4
+info:
+  title: Test Site
+  description: 'Site Key: 32115adf-b283-42da-853a-46a0719581bc, Environment Key: a78dbecb-21a6-44f0-9304-24a3f3b7842b'
+  version: '2026.03.26'
+servers:
+  - url: https://22refresh-test.flowgear.net
+paths:
+  /rik-test-basic-web-app-1:
+    get:
+      summary: Basic web app test
+      description: 'Basic web app test (Revision 0000002, Published 2026-03-26T14:09:45.6928370+00:00, Workflow Key 53455100-40e6-414b-bed1-7c268e6eb67d).'
+      operationId: 53455100-40e6-414b-bed1-7c268e6eb67d
+      responses:
+        '200':
+          description: Response Example
+          headers:
+            Content-Type:
+              description: 'Example: application/json'
+              schema:
+                type: string
+              example: application/json
+            Access-Control-Allow-Origin:
+              description: "Example: https://localhost:3000\nhttp://localhost:6274\nhttps://behlruij.blob.core.windows.net"
+              schema:
+                type: string
+              example: "https://localhost:3000\nhttp://localhost:6274\nhttps://behlruij.blob.core.windows.net"
+            applicaction/json; charset=utf-8:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+              example:
+                result:
+                  items:
+                    - name: hello
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      description: 'Bearer {ApiKey}'
+      name: Authorization
+      in: header
+security:
+  - ApiKeyAuth: [ ]
