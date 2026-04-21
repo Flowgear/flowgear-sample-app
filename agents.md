@@ -13,7 +13,7 @@ Do not analyze or build until you have a functional Flowgear Builder MCP Server 
 ## Flowgear workflows
 
 - Workflows describe steps to acquire, push or otherwise integrate between data sources
-- There should be a registered MCP server called `flowgear` which contains all the tools you need to find, design and save workflows. If there isn't one called `flowgear`, let the user know it needs to be registered, seeing `Configure Flowgear Builder MCP Server`.
+- There should be a registered MCP server called `flowgear` which contains all the tools you need to find, design and save workflows. If there isn't one called `flowgear`, let the user know it needs to be registered, see `Configure Flowgear Builder MCP Server`.
 - There is an MCP resource that explains how to use the tools. Read that before doing anything else.
 - For a workflow to be invoked via this app, it must be HTTP-triggered. First step in the Workflow should be v2.Http Node, HttpReceiveJsonObject or HttpReceiveJsonArray method (where method and uri binding are declared as parameters), last step should be v2.Http Node, HttpRespondJsonObject or HttpRespondJsonArray method
 - After creating or editing a workflow, download a fresh openapi.yml definition so that you can see the service definitions in order to bind front-end.
