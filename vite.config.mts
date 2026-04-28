@@ -87,5 +87,8 @@ If the app doesn't load in Flowgear, refresh after accepting the certificate.
                 "Access-Control-Allow-Origin": "*",
             },
         },
+        build: {
+            cssMinify: "esbuild",
+        },
     };
 });
