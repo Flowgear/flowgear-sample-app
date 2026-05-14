@@ -24,6 +24,36 @@ body {
     padding: 0 30px;
 }
 
+.route-nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.route-debug {
+    margin: 16px 0;
+    padding: 12px;
+    border: 1px dashed #bfc6cc;
+    border-radius: 4px;
+    background-color: #f7f8fa;
+}
+
+[data-theme="dark-theme-ci"] .route-debug {
+    border-color: #4f5a58 !important;
+    background-color: #2a3432;
+}
+
+.page-section {
+    margin-top: 10px;
+}
+
+.button-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
 .endpoint-response {
     margin-top: 20px;
     padding: 16px;
