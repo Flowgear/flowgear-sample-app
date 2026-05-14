@@ -30,6 +30,43 @@ body {
     flex-wrap: wrap;
 }
 
+.basic-button {
+    padding: 7px 12px;
+    border: 1px solid #cfd4da;
+    border-radius: 4px;
+    background-color: #ffffff;
+    color: #1f252b;
+    cursor: pointer;
+    line-height: 1.2;
+    font-size: 13px;
+}
+
+.basic-button:hover {
+    background-color: #f4f6f8;
+    border-color: #bec5cd;
+}
+
+.basic-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(3, 102, 214, 0.25);
+}
+
+.basic-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.basic-button-primary {
+    background-color: #0a7d74;
+    border-color: #0a7d74;
+    color: #ffffff;
+}
+
+.basic-button-primary:hover {
+    background-color: #086a63;
+    border-color: #086a63;
+}
+
 .route-debug {
     margin: 16px 0;
     padding: 12px;
@@ -41,6 +78,28 @@ body {
 [data-theme="dark-theme-ci"] .route-debug {
     border-color: #4f5a58 !important;
     background-color: #2a3432;
+}
+
+[data-theme="dark-theme-ci"] .basic-button {
+    background-color: #2b3533;
+    border-color: #4b5755;
+    color: #e7eceb;
+}
+
+[data-theme="dark-theme-ci"] .basic-button:hover {
+    background-color: #364240;
+    border-color: #5a6664;
+}
+
+[data-theme="dark-theme-ci"] .basic-button-primary {
+    background-color: #138377;
+    border-color: #138377;
+    color: #ffffff;
+}
+
+[data-theme="dark-theme-ci"] .basic-button-primary:hover {
+    background-color: #11a395;
+    border-color: #11a395;
 }
 
 .page-section {

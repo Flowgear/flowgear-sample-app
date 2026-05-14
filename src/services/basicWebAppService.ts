@@ -1,4 +1,4 @@
-import { Flowgear } from "flowgear-webapp";
+import { Flowgear } from "../flowgearSdk";
 import type { BasicWebAppResponse } from "../models/basicWebApp";
 
 const BASIC_WEB_APP_ENDPOINT = "/rik-test-basic-web-app-1";

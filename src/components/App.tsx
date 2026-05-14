@@ -1,36 +1,37 @@
 import { useEffect, useState } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import type { BasicWebAppResponse } from "../models/basicWebApp";
-import type { HashRouteState } from "../models/routing";
 import { getBasicWebAppData } from "../services/basicWebAppService";
-import { createHashRoute, parseHashRoute } from "../utils/hashRouting";
+import { Flowgear } from "../flowgearSdk";
 
-function HomePage({
-  onNavigate,
-}: {
-  onNavigate: (path: string, query?: Record<string, string>) => void;
-}) {
+function HomePage() {
+  const navigate = useNavigate();
+
   return (
     <div className="page-section">
       <h2>Home</h2>
       <p>
         This app uses the URL hash for routing inside the iframe. The parent
         can set the iframe URL with hashes like <code>#/customers</code> or{" "}
-        <code>#%2Fcustomers%3Fstatus%3Dactive</code>.
+        <code>#/customers?status=active</code>.
       </p>
       <div className="button-row">
         <button
-          className="btn btn-command btn-command-text"
-          onClick={() => {
-            onNavigate("/customers", { status: "active", source: "home" });
-          }}
+          className="basic-button"
+          onClick={() => navigate("/customers?status=active&source=home")}
         >
           Open Active Customers
         </button>
         <button
-          className="btn btn-command btn-command-text"
-          onClick={() => {
-            onNavigate("/settings", { tab: "profile" });
-          }}
+          className="basic-button"
+          onClick={() => navigate("/settings?tab=profile")}
         >
           Open Settings
         </button>
@@ -39,8 +40,9 @@ function HomePage({
   );
 }
 
-function CustomersPage({ routeState }: { routeState: HashRouteState }) {
-  const statusFilter = routeState.query.status ?? "all";
+function CustomersPage() {
+  const [searchParams] = useSearchParams();
+  const statusFilter = searchParams.get("status") ?? "all";
 
   return (
     <div className="page-section">
@@ -74,12 +76,14 @@ function CustomersPage({ routeState }: { routeState: HashRouteState }) {
   );
 }
 
-function SettingsPage({ routeState }: { routeState: HashRouteState }) {
+function SettingsPage() {
+  const [searchParams] = useSearchParams();
+
   return (
     <div className="page-section">
       <h2>Settings</h2>
       <p>
-        Example tab from hash query: <strong>{routeState.query.tab ?? "general"}</strong>
+        Example tab from hash query: <strong>{searchParams.get("tab") ?? "general"}</strong>
       </p>
     </div>
   );
@@ -100,7 +104,7 @@ function WorkflowPage({
     <div className="page-section">
       <h2>Workflow Data</h2>
       <button
-        className="btn btn-command btn-command-text btn-command-emphasis refresh-button"
+        className="basic-button basic-button-primary refresh-button"
         onClick={onRefresh}
         disabled={isLoading}
       >
@@ -116,42 +120,28 @@ function WorkflowPage({
   );
 }
 
-function App() {
-  const [routeState, setRouteState] = useState<HashRouteState>(() =>
-    parseHashRoute(window.location.hash),
+function RouteDebug() {
+  const location = useLocation();
+
+  return (
+    <div className="route-debug">
+      <div>
+        <strong>Current Path:</strong> {location.pathname}
+      </div>
+      <div>
+        <strong>Raw Hash:</strong> {window.location.hash || "(empty)"}
+      </div>
+    </div>
   );
+}
+
+function WorkflowRoute() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [data, setData] = useState<BasicWebAppResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const onHashChange = () => {
-      setRouteState(parseHashRoute(window.location.hash));
-    };
-
-    window.addEventListener("hashchange", onHashChange);
-
-    return () => {
-      window.removeEventListener("hashchange", onHashChange);
-    };
-  }, []);
-
-  const navigateTo = (path: string, query?: Record<string, string>) => {
-    const nextHash = createHashRoute(path, query);
-
-    if (window.location.hash === nextHash) {
-      return;
-    }
-
-    window.location.hash = nextHash;
-  };
-
-  useEffect(() => {
-    if (routeState.route !== "workflow") {
-      return;
-    }
-
     let isCancelled = false;
 
     const loadData = async () => {
@@ -185,88 +175,97 @@ function App() {
     return () => {
       isCancelled = true;
     };
-  }, [refreshKey, routeState.route]);
+  }, [refreshKey]);
+
+  return (
+    <WorkflowPage
+      data={data}
+      error={error}
+      isLoading={isLoading}
+      onRefresh={() => {
+        setRefreshKey((currentValue) => currentValue + 1);
+      }}
+    />
+  );
+}
+
+function NotFoundPage() {
+  const location = useLocation();
+
+  return (
+    <div className="page-section">
+      <h2>Not Found</h2>
+      <p>
+        Route <code>{location.pathname}</code> is not defined. Try{" "}
+        <code>#/</code>, <code>#/workflow</code>, <code>#/customers</code>, or{" "}
+        <code>#/settings</code>.
+      </p>
+    </div>
+  );
+}
+
+function RouteButton({
+  label,
+  to,
+  isActive,
+}: {
+  label: string;
+  to: string;
+  isActive: boolean;
+}) {
+  const navigate = useNavigate();
+
+  return (
+    <button
+      className={`basic-button ${isActive ? "basic-button-primary" : ""}`}
+      onClick={() => navigate(to)}
+    >
+      {label}
+    </button>
+  );
+}
+
+function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const currentPath = `${location.pathname}${location.search}`;
+    void Flowgear.Sdk.setParentPath(currentPath);
+  }, [location.pathname, location.search]);
 
   return (
     <>
       <nav className="navbar navbar-fixed-top toolbar-container">
         <div className="command-container-center-controls route-nav">
-          <button
-            className={`btn btn-command btn-command-text ${
-              routeState.route === "home" ? "btn-command-emphasis" : ""
-            }`}
-            onClick={() => navigateTo("/")}
-          >
-            Home
-          </button>
-          <button
-            className={`btn btn-command btn-command-text ${
-              routeState.route === "workflow" ? "btn-command-emphasis" : ""
-            }`}
-            onClick={() => navigateTo("/workflow")}
-          >
-            Workflow
-          </button>
-          <button
-            className={`btn btn-command btn-command-text ${
-              routeState.route === "customers" ? "btn-command-emphasis" : ""
-            }`}
-            onClick={() => navigateTo("/customers", { status: "active" })}
-          >
-            Customers
-          </button>
-          <button
-            className={`btn btn-command btn-command-text ${
-              routeState.route === "settings" ? "btn-command-emphasis" : ""
-            }`}
-            onClick={() => navigateTo("/settings", { tab: "general" })}
-          >
-            Settings
-          </button>
+          <RouteButton label="Home" to="/" isActive={location.pathname === "/"} />
+          <RouteButton
+            label="Workflow"
+            to="/workflow"
+            isActive={location.pathname === "/workflow"}
+          />
+          <RouteButton
+            label="Customers"
+            to="/customers?status=active"
+            isActive={location.pathname === "/customers"}
+          />
+          <RouteButton
+            label="Settings"
+            to="/settings?tab=general"
+            isActive={location.pathname === "/settings"}
+          />
         </div>
       </nav>
 
       <div className="app-contentarea">
-        <div className="route-debug">
-          <div>
-            <strong>Current Path:</strong> {routeState.path}
-          </div>
-          <div>
-            <strong>Raw Hash:</strong> {routeState.rawHash || "(empty)"}
-          </div>
-        </div>
-
-        {routeState.route === "home" && <HomePage onNavigate={navigateTo} />}
-
-        {routeState.route === "workflow" && (
-          <WorkflowPage
-            data={data}
-            error={error}
-            isLoading={isLoading}
-            onRefresh={() => {
-              setRefreshKey((currentValue) => currentValue + 1);
-            }}
-          />
-        )}
-
-        {routeState.route === "customers" && (
-          <CustomersPage routeState={routeState} />
-        )}
-
-        {routeState.route === "settings" && (
-          <SettingsPage routeState={routeState} />
-        )}
-
-        {routeState.route === "not-found" && (
-          <div className="page-section">
-            <h2>Not Found</h2>
-            <p>
-              Route <code>{routeState.path}</code> is not defined. Try{" "}
-              <code>#/</code>, <code>#/workflow</code>, <code>#/customers</code>, or{" "}
-              <code>#/settings</code>.
-            </p>
-          </div>
-        )}
+        <RouteDebug />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/workflow" element={<WorkflowRoute />} />
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/home" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
       </div>
     </>
   );
