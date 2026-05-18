@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 
-export default function Customers() {
+export default function CustomersExample() {
   const [searchParams] = useSearchParams();
   const statusFilter = searchParams.get("status") ?? "all";
 

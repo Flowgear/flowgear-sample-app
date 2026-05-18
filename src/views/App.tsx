@@ -4,10 +4,10 @@ import { Flowgear } from "../flowgearSdk";
 import BackButton from "../components/BackButton";
 import RouteButton from "../components/RouteButton";
 import RouteDebug from "../components/RouteDebug";
-import Customers from "./Customers";
-import Home from "./Home";
-import NotFound from "./NotFound";
-import Settings from "./Settings";
+import CustomersExample from "./Examples/CustomersExample";
+import HomeExample from "./Examples/HomeExample";
+import NotFoundExample from "./Examples/NotFoundExample";
+import SettingsExample from "./Examples/SettingsExample";
 
 export default function App() {
   const location = useLocation();
@@ -31,24 +31,24 @@ export default function App() {
           />
           <RouteButton
             label="Customers"
-            to="/customers?status=inactive"
-            isActive={location.pathname === "/customers"}
+            to="/customers-example?status=inactive"
+            isActive={location.pathname === "/customers-example"}
           />
           <RouteButton
             label="Settings"
-            to="/settings?tab=general"
-            isActive={location.pathname === "/settings"}
+            to="/settings-example?tab=general"
+            isActive={location.pathname === "/settings-example"}
           />
         </div>
       </nav>
 
       <div className="app-contentarea">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/home" element={<Navigate to="/" replace />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/" element={<HomeExample />} />
+          <Route path="/customers-example" element={<CustomersExample />} />
+          <Route path="/settings-example" element={<SettingsExample />} />
+          <Route path="/home-example" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundExample />} />
         </Routes>
         <RouteDebug />
       </div>

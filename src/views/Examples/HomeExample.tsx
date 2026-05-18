@@ -10,13 +10,13 @@ export default function Home() {
       <div className="button-row">
         <button
           className="basic-button"
-          onClick={() => navigate("/customers?status=active&source=home")}
+          onClick={() => navigate("/customers-example?status=active&source=home")}
         >
           Open Active Customers
         </button>
         <button
           className="basic-button"
-          onClick={() => navigate("/settings?tab=profile")}
+          onClick={() => navigate("/settings-example?tab=profile")}
         >
           Open Settings
         </button>
