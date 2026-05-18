@@ -7,11 +7,6 @@ export default function Home() {
     <div className="page-section">
       <h2>Home</h2>
       <p>Hello World!</p>
-      <p>
-        This app uses the URL hash for routing inside the iframe. The parent
-        can set the iframe URL with hashes like <code>#/customers</code> or{" "}
-        <code>#/customers?status=active</code>.
-      </p>
       <div className="button-row">
         <button
           className="basic-button"
