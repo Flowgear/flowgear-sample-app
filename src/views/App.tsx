@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { Flowgear } from "../flowgearSdk";
+import { Flowgear } from "flowgear-webapp";
 import BackButton from "../components/BackButton";
 import RouteButton from "../components/RouteButton";
 import RouteDebug from "../components/RouteDebug";

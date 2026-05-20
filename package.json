@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "flowgear-webapp": "^1.4.3",
+    "flowgear-webapp": "^1.5.2",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.15.0",
