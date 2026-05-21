@@ -46,7 +46,14 @@ To set up the MCP Server:
 ## Flowgear SDK helpers
 - `init()` is called in `src/index.tsx` to register the app with the host console before rendering.
 - `invoke(method, url, payload?, headers?, tenant?)` calls published Flowgear workflows (no manual auth required). If you hit CORS errors, ensure the host is whitelisted on the Flowgear site.
+- `setParentPath(path)` updates the parent Flowgear Console URL to match in-app navigation state. Use this for route changes so browser history and deep-linking in the Console stay aligned.
 - UI helpers: `confirmModal`, `getTextModal`, `setAlert`, and `openUrl` are available for confirmations, text prompts, alerts, and opening new tabs.
+
+## Routing
+- React Router can be used for in-app navigation.
+- Keep routing client-side only; do not use form submissions for navigation.
+- When navigation changes route, call `Flowgear.Sdk.setParentPath(...)` with the current path so the parent Console URL remains in sync.
+- Do not trigger workflow/API calls directly from route render loops. Keep data fetching in stable effects or explicit user actions to avoid repeated calls.
 
 
 ## Publishing checklist
