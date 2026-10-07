@@ -5,12 +5,12 @@ React + TypeScript app that is always embedded inside the Flowgear Console. All 
 ## Tech stack (current)
 - React 19.1 + React DOM 19.1 with the React Compiler enabled
 - Vite 7.1 (TypeScript 5.9) with `@vitejs/plugin-react` and `@vitejs/plugin-basic-ssl`
-- Flowgear SDK: `flowgear-webapp@1.4.3` (`Flowgear.Sdk.invoke`, `init`, `setAlert`, etc.)
+- Flowgear SDK: `flowgear-webapp@1.6.1` (`Flowgear.Sdk.invoke`, `init`, `setAlert`, etc.)
 - UI: Bootstrap 5.3.8 and Sass
 - Linting: ESLint 9.x (see `eslint.config.js`)
 
 ## API usage
-- Call workflows via `Flowgear.Sdk.invoke(method, relativePath, payload?, headers?, tenant?)`.
+- Call workflows via `Flowgear.Sdk.invoke(method, relativePath, payload?, headers?, tenant?, hostname?)`.
 - Discover available endpoints in `openapi.yml`, but ignore `servers`, `components`, and `security`; only the method and relative URL are passed to `invoke`.
 - Do not call APIs directly with `fetch`/`axios` because the console provides the auth cookie on your behalf.
 
