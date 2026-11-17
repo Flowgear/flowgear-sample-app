@@ -15,6 +15,7 @@ Do not analyze or build until you have a functional Flowgear Builder MCP Server 
 - Workflows describe steps to acquire, push or otherwise integrate between data sources
 - There should be a registered MCP server called `flowgear` which contains all the tools you need to find, design and save workflows. If there isn't one called `flowgear`, let the user know it needs to be registered, see `Configure Flowgear Builder MCP Server`.
 - There is an MCP resource that explains how to use the tools. Read that before doing anything else.
+- Builder MCP tools take `siteKey` and `environmentKey` on each call. Call `GetBuilderContext` to list the Sites and Environments you can use. Use the Site in `FG_DEV_SITE` unless the user says otherwise.
 - For a workflow to be invoked via this app, it must be HTTP-triggered. First step in the Workflow should be v2.Http Node, HttpReceiveJsonObject or HttpReceiveJsonArray method (where method and uri binding are declared as parameters), last step should be v2.Http Node, HttpRespondJsonObject or HttpRespondJsonArray method
 - After creating or editing a workflow, download a fresh openapi.yml definition so that you can see the service definitions in order to bind front-end.
 
@@ -25,19 +26,19 @@ Do not analyze or build until you have a functional Flowgear Builder MCP Server 
 
 ## Configure Flowgear Builder MCP Server
 
-An MCP server called `flowgear` should be registered and its URL should end with `/mcp/builder`. Before beginning any work, test it is functional by finding a tool list, there should be 15+ tools and one of them should be called `GetWorkflow`.
+An MCP server called `flowgear` should be registered at `https://{tenant}.flowgear.net/mcp/builder`, where `{tenant}` is the value of `FG_DEV_TENANT` in `.env.local`. Builder MCP uses one URL per tenant for all Sites and Environments. Before beginning any work, test it is functional by finding a tool list, there should be 15+ tools and one of them should be called `GetWorkflow`.
 
-If the server is not configured, not pointing to the right URL or not auth'd, help the user get it set up. The only data point you need is their Flowgear Environment domain. 
+Older setups registered Builder MCP on an Environment hostname (e.g. `somedomain-sometenant.flowgear.net/mcp/builder`). That URL is no longer supported: it only lists a single `BuilderMcpEndpointMoved` tool. If you see that tool, or the registered URL is not the tenant URL above, treat the server as not configured.
 
-To get the Environment domain:
-- Let the user know that in order to register the builder MCP Server, you need their Environment Subdomain. This can be found from the Site Settings Pane and is the URL shown just below their Test Environment (e.g. `somedomain-sometenant.flowgear.net`).
-- Translate this link and present it to the user: `https://app.flowgear.net/#t-{tenant}/sites/{site}/site` where `{tenant}` is the value of `FG_DEV_TENANT` in `.env.local` and `{site}` is the value of `FG_DEV_SITE`.
+If the server is not configured, not pointing to the right URL or not auth'd, help the user get it set up. The only data point you need is the tenant key, which is `FG_DEV_TENANT` in `.env.local`. Do not ask the user for an Environment domain.
 
 To set up the MCP Server:
 - Read the guidance at `https://help.flowgear.net/v2/features/builder-mcp-server`
-- Give the user a set of commands to run in a terminal, translate in their Environment domain - don't give the user templated commands.
+- Give the user a set of commands to run in a terminal, with the tenant URL filled in - don't give the user templated commands. If an old `flowgear` server is registered on an Environment hostname, include the command to remove it first.
+- When they sign in, Flowgear asks which Sites and Environments the connection may use and when access expires. Tell the user to include the Site in `FG_DEV_SITE` and the Environments they will build in.
 - If they have run the commands and you can't see the MCP server, ask them to restart the IDE/extension.
 - Confirm that the tools list call works and shows `GetWorkflow` as one of the available tools.
+- If a tool later says the connection wasn't granted access to a Site or Environment, or the access has expired, ask the user to reconnect and grant it.
 
 ## General
 - Don't use forms, the web app runs in a sandbox and form submissions are not allowed.
